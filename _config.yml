@@ -62,7 +62,7 @@ kramdown:
 # Gitalk
 gitalk:
   enable: true    #是否开启Gitalk评论
-  clientID:                             #Gitalk使用OAuth生成的clientID Ov23liDkMoUyyXulUBKm
+  clientID: Ov23liDkMoUyyXulUBKm                            #Gitalk使用OAuth生成的clientID 
   clientSecret: 51be1eea159b270fc0181b3b04add50d0149e6ab    #Gitalk使用OAuth生成的clientSecret
   repo: shichaofaan.github.io    #仓库名称
   owner: shichaofaan    #github用户名
