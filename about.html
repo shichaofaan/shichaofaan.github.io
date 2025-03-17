@@ -101,12 +101,13 @@ header-img: "img/post-bg-rwd.jpg"
 </script>
 
 
-<!-- Gitalk 评论 start  -->
+<!-- Gitalk 评论 start,此处引入就无需本地下载了-->
 {% if site.gitalk.enable %}
 <!-- Gitalk link  -->
 <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 <script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
 
+<!-- 创建一个容器用于存放gitalk-->
 <div id="gitalk-container"></div>
     <script type="text/javascript">
     var gitalk = new Gitalk({
