@@ -64,7 +64,7 @@ gitalk:
   enable: true    #是否开启Gitalk评论
   clientID: Ov23li3hUwNI2BUaMLtV                            #Gitalk使用OAuth生成的clientID
   clientSecret: 14d7f4cf979b0c5954ccf63c733efe1634cade57    #Gitalk使用OAuth生成的clientSecret
-  repo: shichaofaan.github.io    #仓库名称
+  repo: gitalk-comments    #仓库名称
   owner: shichaofaan    #github用户名
   admin: shichaofaan
   distractionFreeMode: true #是否启用类似FB的阴影遮罩
