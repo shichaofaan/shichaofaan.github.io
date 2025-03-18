@@ -7,8 +7,8 @@
 ## 致谢
 
 1. 模板出自这里 [Fork](https://github.com/Huxpro/huxpro.github.io) 。 
-2. 感谢开源 Jekyll、Github Pages、Bootstrap!
-3. 衷心感谢 [qiubaiying](https://github.com/qiubaiying/)这个作者
+2. 感谢开源 [Jekyll](https://jekyllcn.com/docs/home/)、[Github Pages](https://pages.github.com/)、[Bootstrap](https://www.bootcss.com/)!
+3. 衷心感谢作者 [qiubaiying](https://github.com/qiubaiying/)
 
 ## License
 
