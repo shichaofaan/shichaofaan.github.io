@@ -19,7 +19,7 @@ tags:
 
 >***结论：可以简单理解为varchar精度远远大于bigint***
 ***
->1.限制：字段类型没有超限制，left join 左表连接字段为bigint，右表连接字段为varchar，互换位置（***没问题，隐式转换正确***）
+>### 1.限制：字段类型没有超限制，left join 左表连接字段为bigint，右表连接字段为varchar，互换位置（***没问题，隐式转换正确***）
 
 ```SQL
 WITH
@@ -60,7 +60,7 @@ LEFT JOIN right_table
 ON left_table.id_bigint = right_table.id_varchar;
 ```
 ***
->2.限制：bigint字段大小接近极限，left join 左表连接字段为bigint，右表连接字段为varchar，互换位置（***无论左右表如何切换，最后结果是``全链接``***）
+>### 2.限制：bigint字段大小接近极限，left join 左表连接字段为bigint，右表连接字段为varchar，互换位置（***无论左右表如何切换，最后结果是``全链接``***）
 
 ```SQL
 WITH
@@ -102,9 +102,11 @@ LEFT JOIN left_table
 ON right_table.id_varchar = left_table.id_bigint;
 ```
 
-![alt](https://shichaofaan.github.io/_posts/img/2025-03-18/img001.png)
+![SQL_Query](https://shichaofaan.github.io/img/in-post/2025-03-18/img001.png)
+
 ***
->3.限制：bigint字段大小处于极限长度的中等位置，left join 左表连接字段为bigint，右表连接字段为varchar，互换位置（***无论左右表如何切换，最后结果没问题***）
+>### 3.限制：bigint字段大小处于极限长度的中等位置，left join 左表连接字段为bigint，右表连接字段为varchar，互换位置（***无论左右表如何切换，最后结果没问题***）
+
 ```SQL
 WITH
 left_table AS (  
