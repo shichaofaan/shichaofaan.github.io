@@ -1,0 +1,24 @@
+[
+  {
+    "id": "ds:demo:wf_trade_dws:task_trade_gmv",
+    "project": "demo",
+    "workflow": "wf_trade_dws",
+    "task_name": "task_trade_gmv",
+    "task_type": "SQL",
+    "description": "dim:trade_gmv 计算有效订单 GMV",
+    "script_ref": "10001",
+    "script_content": "-- dim:trade_gmv\nINSERT INTO dws.trade_gmv\nSELECT o.order_id, o.user_id, o.pay_amount AS gmv\nFROM ods.orders o\nWHERE o.status = 'paid';\n",
+    "ui_url": "http://localhost:12345/dolphinscheduler/ui/projects/demo/workflow/definitions/1"
+  },
+  {
+    "id": "ds:demo:wf_trade_dws:task_orphan",
+    "project": "demo",
+    "workflow": "wf_trade_dws",
+    "task_name": "task_orphan",
+    "task_type": "SQL",
+    "description": "no dim tag",
+    "script_ref": "10002",
+    "script_content": "SELECT 1",
+    "ui_url": "http://localhost:12345/dolphinscheduler/ui/projects/demo/workflow/definitions/1"
+  }
+]

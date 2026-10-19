@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>data-lineage-hub</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="top">
+        <div class="brand">data-lineage-hub</div>
+        <form id="search-form" class="search">
+          <input
+            id="dimension"
+            name="dimension"
+            placeholder="输入维度，例如 trade_gmv"
+            autocomplete="off"
+          />
+          <button type="submit">查看血缘</button>
+        </form>
+      </header>
+      <main>
+        <section id="cy" class="graph" aria-label="lineage graph"></section>
+        <aside class="side">
+          <h2>详情</h2>
+          <div id="detail" class="detail muted">点击节点查看 DS / Git / 语雀 链接</div>
+          <h2>问答</h2>
+          <form id="ask-form" class="ask">
+            <textarea id="question" rows="3" placeholder="trade_gmv 是怎么洗出来的？"></textarea>
+            <button type="submit">提问</button>
+          </form>
+          <div id="answer" class="answer muted"></div>
+        </aside>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

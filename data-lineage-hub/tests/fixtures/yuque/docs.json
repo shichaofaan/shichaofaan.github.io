@@ -1,0 +1,12 @@
+[
+  {
+    "id": "yuque:demo/metrics:trade-gmv",
+    "book": "demo/metrics",
+    "slug": "trade-gmv",
+    "title": "dim:trade_gmv 交易 GMV 口径说明",
+    "url": "https://www.yuque.com/demo/metrics/trade-gmv",
+    "updated_at": "2026-01-01T00:00:00Z",
+    "excerpt": "有效订单支付金额合计，剔除取消与退款。对应表 dws.trade_gmv。",
+    "body": "dim:trade_gmv\n\n## 口径\n- 来源表：ods.orders\n- 结果表：dws.trade_gmv\n- 字段：pay_amount 作为 gmv\n"
+  }
+]

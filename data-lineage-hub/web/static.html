@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>data-lineage-hub</title>
+    <script src="https://unpkg.com/cytoscape@3.30.2/dist/cytoscape.min.js"></script>
+    <style>
+      :root {
+        --bg0: #0f1714;
+        --bg1: #16211c;
+        --ink: #e7f0ea;
+        --muted: #8fa399;
+        --accent: #3dba8a;
+        --line: #2a3b33;
+        --font-display: "Iowan Old Style", Palatino, "Songti SC", serif;
+        --font-body: "IBM Plex Sans", "Noto Sans SC", sans-serif;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; height: 100%; background: radial-gradient(1000px 500px at 10% -10%, #1d3a2c, transparent 55%), var(--bg0); color: var(--ink); font-family: var(--font-body); }
+      .top { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; border-bottom: 1px solid var(--line); align-items: center; }
+      .brand { font-family: var(--font-display); font-size: 1.35rem; }
+      form { display: flex; gap: .5rem; }
+      input, textarea { background: var(--bg1); border: 1px solid var(--line); color: var(--ink); border-radius: 8px; padding: .55rem .75rem; font: inherit; }
+      button { background: var(--accent); color: #062016; border: 0; border-radius: 8px; padding: .55rem .9rem; font-weight: 600; cursor: pointer; }
+      main { display: grid; grid-template-columns: 1.6fr .9fr; min-height: calc(100vh - 70px); }
+      #cy { min-height: 70vh; border-right: 1px solid var(--line); }
+      .side { padding: 1rem; overflow: auto; }
+      .side h2 { margin: .2rem 0 .6rem; font-size: .85rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+      .detail, .answer { white-space: pre-wrap; line-height: 1.55; margin-bottom: 1.2rem; color: var(--muted); }
+      .detail a { color: var(--accent); }
+      @media (max-width: 900px) { main { grid-template-columns: 1fr; } #cy { min-height: 45vh; border-right: 0; border-bottom: 1px solid var(--line); } }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <div class="brand">data-lineage-hub</div>
+      <form id="search-form">
+        <input id="dimension" value="trade_gmv" placeholder="维度 id" />
+        <button type="submit">查看血缘</button>
+      </form>
+    </header>
+    <main>
+      <section id="cy"></section>
+      <aside class="side">
+        <h2>详情</h2>
+        <div id="detail" class="detail">点击节点查看链接</div>
+        <h2>问答</h2>
+        <form id="ask-form" style="flex-direction:column">
+          <textarea id="question" rows="3">trade_gmv 是怎么洗出来的？</textarea>
+          <button type="submit">提问</button>
+        </form>
+        <div id="answer" class="answer"></div>
+      </aside>
+    </main>
+    <script>
+      const colorByKind = { dimension: "#3dba8a", entity: "#8fa399", ds_task: "#4ea1ff", code_span: "#f0a05a", yuque_doc: "#b48cff" };
+      const cy = cytoscape({
+        container: document.getElementById("cy"),
+        style: [
+          { selector: "node", style: { label: "data(label)", color: "#e7f0ea", "background-color": "data(color)", "font-size": 11, "text-wrap": "wrap", "text-max-width": 120, width: 28, height: 28 } },
+          { selector: "edge", style: { width: 1.5, "line-color": "#334840", "target-arrow-shape": "triangle", "target-arrow-color": "#334840", "curve-style": "bezier", label: "data(rel)", "font-size": 8, color: "#8fa399" } }
+        ],
+        layout: { name: "cose", animate: true }
+      });
+      const detailEl = document.getElementById("detail");
+      const answerEl = document.getElementById("answer");
+
+      function renderDetail(node) {
+        const meta = node.data("meta") || {};
+        const kind = node.data("kind");
+        const lines = ["类型: " + kind, "标签: " + node.data("label"), ""];
+        const url = meta.ui_url || meta.blob_url || meta.url;
+        if (meta.workflow) lines.push("工作流: " + meta.workflow);
+        if (meta.task_name) lines.push("任务: " + meta.task_name);
+        if (meta.path) lines.push("路径: " + meta.path + ":" + meta.start_line + "-" + meta.end_line);
+        if (meta.title) lines.push("标题: " + meta.title);
+        detailEl.style.color = "#e7f0ea";
+        detailEl.innerHTML = lines.join("\n") + (url ? ("\n链接: <a href='" + url + "' target='_blank' rel='noreferrer'>" + url + "</a>") : "");
+      }
+
+      async function loadGraph(dimension) {
+        const resp = await fetch("/graph?dimension=" + encodeURIComponent(dimension));
+        if (!resp.ok) { detailEl.textContent = "未找到维度: " + dimension; return; }
+        const payload = await resp.json();
+        cy.elements().remove();
+        cy.add([
+          ...payload.nodes.map(n => ({ data: { id: n.id, label: n.label, kind: n.kind, color: colorByKind[n.kind] || "#8fa399", meta: n.meta } })),
+          ...payload.edges.map((e, i) => ({ data: { id: "e" + i, source: e.from_id, target: e.to_id, rel: e.rel } }))
+        ]);
+        cy.layout({ name: "cose", animate: true, fit: true, padding: 30 }).run();
+      }
+
+      cy.on("tap", "node", evt => renderDetail(evt.target));
+      document.getElementById("search-form").addEventListener("submit", async e => { e.preventDefault(); await loadGraph(document.getElementById("dimension").value.trim()); });
+      document.getElementById("ask-form").addEventListener("submit", async e => {
+        e.preventDefault();
+        const question = document.getElementById("question").value.trim();
+        const dimension = document.getElementById("dimension").value.trim() || undefined;
+        answerEl.style.color = "#e7f0ea";
+        answerEl.textContent = "思考中…";
+        const resp = await fetch("/ask", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question, dimension }) });
+        const data = await resp.json();
+        answerEl.textContent = data.answer || JSON.stringify(data);
+      });
+      loadGraph("trade_gmv").catch(() => {});
+    </script>
+  </body>
+</html>

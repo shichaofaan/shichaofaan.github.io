@@ -1,0 +1,29 @@
+name: ci
+
+on:
+  push:
+    paths:
+      - "data-lineage-hub/**"
+      - ".github/workflows/ci.yml"
+  pull_request:
+    paths:
+      - "data-lineage-hub/**"
+
+defaults:
+  run:
+    working-directory: data-lineage-hub
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: pip install -e ".[dev]"
+      - name: Lint
+        run: ruff check src tests
+      - name: Test
+        run: pytest -q --cov=lineage_hub --cov-report=term-missing

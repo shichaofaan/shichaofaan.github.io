@@ -1,0 +1,146 @@
+:root {
+  --bg0: #0f1714;
+  --bg1: #16211c;
+  --ink: #e7f0ea;
+  --muted: #8fa399;
+  --accent: #3dba8a;
+  --accent-2: #d4a017;
+  --line: #2a3b33;
+  --ds: #4ea1ff;
+  --code: #f0a05a;
+  --doc: #b48cff;
+  --dim: #3dba8a;
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Songti SC", serif;
+  --font-body: "IBM Plex Sans", "Source Han Sans SC", "Noto Sans SC", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #1d3a2c 0%, transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, #2a2414 0%, transparent 50%),
+    var(--bg0);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+.shell {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.top {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(8px);
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  letter-spacing: 0.02em;
+}
+
+.search,
+.ask {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.search input,
+.ask textarea {
+  background: var(--bg1);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  min-width: 240px;
+  font: inherit;
+}
+
+.ask textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+button {
+  background: var(--accent);
+  color: #062016;
+  border: 0;
+  border-radius: 8px;
+  padding: 0.55rem 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.6fr 0.9fr;
+  min-height: 0;
+}
+
+.graph {
+  min-height: 70vh;
+  border-right: 1px solid var(--line);
+}
+
+.side {
+  padding: 1rem 1.1rem 2rem;
+  overflow: auto;
+  background: color-mix(in srgb, var(--bg1) 88%, transparent);
+}
+
+.side h2 {
+  margin: 0.2rem 0 0.6rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.detail,
+.answer {
+  white-space: pre-wrap;
+  line-height: 1.55;
+  margin-bottom: 1.4rem;
+  font-size: 0.95rem;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.detail a,
+.answer a {
+  color: var(--accent);
+}
+
+@media (max-width: 900px) {
+  .top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  main {
+    grid-template-columns: 1fr;
+  }
+
+  .graph {
+    min-height: 45vh;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}
